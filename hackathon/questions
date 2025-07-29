@@ -1,0 +1,139 @@
+Problem Solving: Hackathon
+Prepared by Naren Allam, Jul, 2025
+1. Solve Any Five Problems: Each problem weighs points equal to its serial number as its
+difficulty increases from 1 to 10. Duration: 24 Hrs.
+2. Each problem is weighted according to its serial number, with difficulty increasing from 1 to 10.
+3. Solve the problems, commit the code to GitHub, and submit.
+1. Social Media Feed "Top K" Posts 📱
+Scenario: You're building a social media feed. From a large number of posts, you need to quickly
+find the K posts with the highest "relevance score" (a value combining likes, recency, etc.) to
+display to a user.
+Task: Given a list of posts and a function to calculate each post's relevance score, return a list
+containing the K posts with the highest scores.
+Data Structures Guide:
+● heapq: Use a min-heap of size K. Iterate through the posts. If the heap isn't full, add the
+post. If it is full and the current post's score is higher than the smallest score in the heap,
+replace the smallest with the current post. This is much faster than sorting all posts.
+● dict: Can be used to cache pre-computed values (like friendship weights) to speed up
+relevance score calculation.
+
+2. E-commerce Flash Sale Hot Items 🔥
+Scenario: An e-commerce site needs to display the K most popular items during a flash sale. The
+challenge is to only show items that are still in stock.
+Task: Design a system that tracks item requests and stock levels. Implement a function to return
+the K most frequently requested items that have a stock quantity greater than zero.
+Data Structures Guide:● dict: Use two dictionaries. request_counts = {'item_id': count} to track popularity and
+stock_levels = {'item_id': quantity} to track availability. Dictionaries provide fast O(1) updates
+and lookups.
+● heapq: To find the top K items, iterate through your request_counts dictionary. For each
+in-stock item, use a min-heap of size K to efficiently track the items with the highest counts
+without sorting.
+
+3. Ride-Sharing Driver Matching 🚗
+Scenario: A ride-sharing app needs to find the N closest available drivers for a user who just
+requested a ride. Driver locations are updated frequently.
+Task: Given a rider's coordinates and a collection of all available drivers and their coordinates,
+return the IDs of the N closest drivers.
+Data Structures Guide:
+● dict: Use a dictionary to map each driver_id to their current coordinates for fast lookups:
+{'driver_abc': (lat, lon)}.
+● heapq: To find the N closest, use a max-heap of size N (by storing negative distances in
+Python's min-heap). Iterate through all drivers, calculating their distance. If the heap isn't full
+or a driver is closer than the farthest one in the heap, update the heap.
+
+4. Hospital Emergency Room Triage 🏥
+Scenario: An ER needs a system to manage incoming patients based on urgency. The system
+must always identify the most critical patient to see next, but also allow for a patient's priority to
+be updated if their condition changes.
+Task: Create a system to add patients with an urgency score, call the patient with the highest
+priority (lowest score), and update a specific patient's urgency score.
+Data Structures Guide:
+● heapq: A min-heap is perfect for the waiting list, storing (urgency, name, ...) tuples. This
+makes fetching the next most-critical patient an O(1) operation.
+● dict: A dictionary mapping name to their entry in the heap is crucial for the update
+functionality. To update a priority, you find the entry via the dictionary, mark it as invalid, and
+add a new, updated entry to the heap. The heap might contain old entries, but they can beignored when popped.
+
+5. Network Router Pathfinding 🌐
+Scenario: A network router must find the cheapest path to send data to a destination. The
+network is a graph of routers connected by links, each with a cost (e.g., latency).
+Task: Implement Dijkstra's algorithm. Given a graph of routers (nodes) and connection costs
+(weighted edges), find the shortest path from a source router to all other routers.
+Data Structures Guide:
+● heapq: A min-heap is the core of Dijkstra's, used as a priority queue. It stores (cost,
+router_id) tuples and always lets you explore the unvisited router with the smallest known
+distance from the source.
+● dict: Use a dictionary distances = {'router_id': cost} to store the minimum cost found so far to
+reach each router.
+● set: A set visited = {'router_id', ...} provides an efficient O(1) way to keep track of nodes
+whose shortest path has already been finalized.
+
+6. The Alchemist's Legacy 🧪
+Scenario: In a crafting game, creating a complex item (like a 'Philosopher's Stone') requires
+ingredients that must themselves be crafted. Each recipe has a cost (time, materials).
+Task: Given a set of recipes, the cost of base materials, and the crafting time for each recipe, find
+the minimum total cost to create a final target item.
+Data Structures Guide:
+● dict: Use dictionaries to represent the crafting system: a recipes book ({'item': {'needs':
+{'ingr': qty}, 'time': t}}), a min_cost table for each item, and a reverse-dependency graph
+({'ingredient': ['item1', 'item2']}).
+● heapq: A min-heap can serve as a worklist. Start by adding base materials (cost, item) to it.
+Repeatedly pop the cheapest finalized item, find which higher-level items use it, and when all
+ingredients for a higher-level item are finalized, calculate its cost and add it to the heap.
+
+7.Aetheria's Market: Inter-dimensional Arbitrage 󰩃
+Scenario: You can trade between different markets with varying, multiplicative exchange rates.
+Your goal is to find a sequence of trades that starts with a certain amount of currency and ends
+with the maximum possible amount after returning to the start.
+Task: Given a graph of markets and exchange rates, find the most profitable trade loop starting
+and ending at a specific market. This involves finding a path with the highest product of edge
+weights.
+Data Structures Guide:
+● dict: Represent the market connections as a graph in a dictionary {'market_A': [('market_B',
+1.2), ...]}. Use another dictionary max_profit = {'market_A': 1.0, ...} to track the best profit
+multiplier to reach each market.
+● heapq: A max-heap (using negative values) can implement a modified Dijkstra's algorithm. It
+prioritizes paths with the highest profit multiplier found so far (-profit, current_market,
+path_list).
+
+8. Project Chimera: Genetic Sequence Assembly 🧬
+Scenario: You need to reconstruct a single, long DNA sequence from a jumble of thousands of
+smaller, overlapping fragments. The goal is to piece them together by always merging the pair
+with the longest overlap.
+Task: Given a list of DNA fragment strings, repeatedly find the pair of fragments with the
+maximum overlap and merge them. Continue until only one fragment remains.
+Data Structures Guide:
+● heapq: Use a max-heap to store all possible merges, prioritized by overlap length: (-overlap,
+frag1_id, frag2_id). This allows you to always find the best next merge in O(1) time.
+● dict: Crucial for state management. A dictionary fragments = {id: 'ATCG...'} holds the string
+for each active fragment. Another dictionary or a set can track active fragment IDs, allowing
+you to efficiently ignore merges in the heap that involve now-obsolete fragments.
+
+9. GridLock City: AI Traffic Control 🚦Scenario: You are programming an AI for a city's traffic light system. The goal is to minimize total
+car waiting time by intelligently scheduling light changes based on car arrivals.
+Task: Create a discrete event simulator. Process a stream of CAR_ARRIVAL events and generate
+CHANGE_LIGHT events to manage traffic flow, respecting cooldown periods for lights.
+Data Structures Guide:
+● heapq: The core of the simulation is the event queue, a min-heap storing future events
+ordered by time: (timestamp, event_type, details). The main loop simply processes the next
+event from the heap.
+● dict: Use dictionaries to represent the state of the world. One dictionary can hold the state of
+each intersection (e.g., {'id_123': {'state': 'GREEN_NS', ...}}). Queues of waiting cars can be
+managed with list objects inside this dictionary.
+
+10. StarHopper: Interstellar Cargo Hauling 🚀
+Scenario: A cargo pilot must complete a list of delivery contracts, each with a specific pickup
+planet and drop-off planet. The pilot needs the most fuel-efficient route that starts at a home
+base, completes all deliveries (respecting the pickup-before-dropoff order), and returns home.
+Task: Find a single, continuous route with minimum total fuel cost that satisfies all
+pickup/drop-off dependencies. This is a complex routing problem similar to the Traveling
+Salesperson Problem with added constraints.
+Data Structures Guide:
+● heapq: Essential for any state-space search algorithm like A*. The priority queue would store
+states to visit, prioritized by cost: (estimated_total_fuel, current_fuel, current_planet,
+completed_contracts_mask).
+● dict: Use a dictionary memo or visited to store the minimum fuel cost found to reach a
+certain state ((current_planet, completed_mask)). This is critical for pruning the search space
+and avoiding redundant calculations.
+● set or bitmask: A set of completed contract IDs or an integer bitmask is needed within the
+state representation to efficiently track which contracts have been fulfilled.
